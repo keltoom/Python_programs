@@ -18,10 +18,7 @@ while len(answers_list) < 50:
     state_answer = screen.textinput(title=f"{len(answers_list)}/50 States",
                                     prompt="What's another state's name?").title()
     if state_answer == "Exit":
-        missing_states = []
-        for state in states:
-            if state not in answers_list:
-                missing_states.append(state)
+        missing_states = [state for state in states if state not in answers_list]
         new_data = pandas.DataFrame(missing_states)
         new_data.to_csv("state_to_learn.csv ")
 
