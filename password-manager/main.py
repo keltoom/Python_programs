@@ -5,6 +5,24 @@ import pyperclip
 import json
 
 
+# -------------------------- FIND PASSWORD ----------------------------------------------#
+def find_password():
+    website = website_input.get()
+    try:
+        with open("data.json") as file:
+            content = json.load(file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="oops", message="No Data file found!")
+    else:
+        if website in content:
+            email = content[website]["email"]
+            password = content[website]["password"]
+            messagebox.showinfo(title=website, message=f"Email: {email}\n"
+                                                       f"Password: {password}")
+        else:
+            messagebox.showinfo(title="Error", message=f"No details for {website} exists.")
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def generate_password():
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
@@ -15,9 +33,9 @@ def generate_password():
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
-    password_letters = [choice(letters) for char in range(randint(8, 10))]
-    password_symbols = [choice(symbols) for char in range(randint(2, 4))]
-    password_numbers = [choice(numbers) for char in range(randint(2, 4))]
+    password_letters = [choice(letters) for _ in range(randint(8, 10))]
+    password_symbols = [choice(symbols) for _ in range(randint(2, 4))]
+    password_numbers = [choice(numbers) for _ in range(randint(2, 4))]
     password_list = password_letters + password_symbols + password_numbers
 
     shuffle(password_list)
@@ -80,9 +98,11 @@ canvas.grid(column=1, row=0)
 
 website_label = Label(text="Website:")
 website_label.grid(column=0, row=1)
-website_input = Entry(width=35)
-website_input.grid(column=1, row=1, columnspan=2)
+website_input = Entry(width=21)
+website_input.grid(column=1, row=1)
 website_input.focus()
+search_button = Button(text="Search", command=find_password)
+search_button.grid(column=2, row=1)
 
 email_username_label = Label(text="Email/Username:")
 email_username_label.grid(column=0, row=2)
@@ -92,7 +112,7 @@ email_username_input.insert(0, "keltoom@gmail.com")
 
 password_label = Label(text="Password:")
 password_label.grid(column=0, row=3)
-password_input = Entry(width=25)
+password_input = Entry(width=21)
 password_input.grid(column=1, row=3)
 generate_password_button = Button(text="Generate Password", command=generate_password)
 generate_password_button.grid(column=2, row=3)
